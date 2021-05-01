@@ -1,0 +1,19 @@
+<h1>ETF's</h1>
+<form class="form-inline">
+    <div class="form-group mx-sm-3 mb-2">
+        <input [(ngModel)]="newEtf" type="text" class="form-control" name="etf" id="inputEtf" placeholder="ETF">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2" (click)="addEtf()">Add</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ETF</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let etf of etfs">
+            <td><a [routerLink]="['etf-country-allocation', etf.id]">{{etf.name}}</a></td>
+        </tr>
+    </tbody>
+</table>
