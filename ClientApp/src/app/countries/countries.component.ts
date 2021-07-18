@@ -19,13 +19,14 @@ export class CountriesComponent{
 
     addCountry(){
       this.http.post('/api/countries/add', { name: this.newCountry }, { responseType: 'text'}).subscribe(response => {
+        this.newCountry = "";
         this.UpdateCountryList();
       })
     }
 
     UpdateCountryList(){
       this.http.get('/api/countries').subscribe((response:Country[]) => {
-        this.countries = response;
+        this.countries = response.sort((a, b) => (a.name > b.name) ? 1 : -1);
       });
     }
 }

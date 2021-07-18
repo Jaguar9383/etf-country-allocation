@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyEtf.Context;
 using MyEtf.Models.Data;
 
@@ -16,7 +17,7 @@ namespace MyEtf.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var etfs = _myEtfContext.Etfs.ToList();
+            var etfs = _myEtfContext.Etfs.Include(x => x.Allocations).ThenInclude(x => x.Country).ToList();
             return Ok(etfs);
         }
 
