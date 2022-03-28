@@ -9,11 +9,13 @@
     <thead>
         <tr>
             <th>ETF</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let etf of etfs">
-            <td><a [routerLink]="['etf-country-allocation', etf.id]">{{etf.name}}</a></td>
+            <td>{{etf.name}}</td>
+            <td><a [routerLink]="['etf-settings', etf.id]" class="btn btn-sm btn-secondary">Settings</a></td>
         </tr>
     </tbody>
 </table>

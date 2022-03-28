@@ -10,6 +10,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CountriesComponent } from './countries/countries.component';
 import { EtfsComponent } from './etfs/etfs.component';
+import { EtfSettingsComponent } from './etf-settings/etf-settings.component';
 import { EtfCountryAllocationComponent } from "./etf-country-allocation/etf-country-allocation.component";
 
 @NgModule({
@@ -19,6 +20,7 @@ import { EtfCountryAllocationComponent } from "./etf-country-allocation/etf-coun
     HomeComponent,
     CountriesComponent,
     EtfsComponent,
+    EtfSettingsComponent,
     EtfCountryAllocationComponent
   ],
   imports: [
@@ -30,6 +32,7 @@ import { EtfCountryAllocationComponent } from "./etf-country-allocation/etf-coun
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'countries', component: CountriesComponent },
       { path: 'etfs', component: EtfsComponent },
+      { path: 'etfs/etf-settings/:id', component: EtfSettingsComponent },
       { path: 'etfs/etf-country-allocation/:id', component: EtfCountryAllocationComponent },
     ])
   ],

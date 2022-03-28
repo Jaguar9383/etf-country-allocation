@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEtf.Context;
 
 namespace etf.myemitent.ru.Migrations
 {
     [DbContext(typeof(MyEtfContext))]
-    partial class MyEtfContextModelSnapshot : ModelSnapshot
+    [Migration("20220328135446_autoupload_type_update")]
+    partial class autoupload_type_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,8 +61,8 @@ namespace etf.myemitent.ru.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AutoUpload")
-                        .HasColumnType("bit");
+                    b.Property<string>("AutoUpload")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");

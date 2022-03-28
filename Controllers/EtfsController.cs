@@ -38,5 +38,13 @@ namespace MyEtf.Controllers
             await _myEtfContext.SaveChangesAsync();
             return new OkObjectResult("Etf added.");
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] Etf etf)
+        {
+            var etfUpdated = _myEtfContext.Etfs.Update(etf);
+            await _myEtfContext.SaveChangesAsync();
+            return Ok(etf);
+        }
     }
 }

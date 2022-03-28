@@ -1,0 +1,18 @@
+<h3>ETF's Settings</h3>
+<h4 *ngIf="etf !== null">{{etf.name}}</h4>
+<form ngif="etf !== null">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Etf data URL</label>
+        <input [(ngModel)]="dataUrl" type="text" class="form-control" name="etfDataUrl" id="etfDataUrl"
+            placeholder="https://">
+    </div>
+    <div class="form-check">
+        <input [(ngModel)]="autoUpload" type="checkbox" class="form-check-input" name="etfAutoUploadData"
+            id="etfAutoUploadData">
+        <label class="form-check-label" for="exampleCheck1">Auto Upload Data</label>
+    </div>
+</form>
+
+<app-etf-country-allocation-component [id]='id'></app-etf-country-allocation-component>
+
+<button class="btn btn-primary mt-2" (click)="saveEtfSettings()">Save</button>
