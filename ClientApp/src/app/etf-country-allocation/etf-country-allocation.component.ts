@@ -21,19 +21,27 @@ export class EtfCountryAllocationComponent {
 
     ngOnInit() {
         this.id = this.activatedRoute.snapshot.params['id'];
+        this.getCountries();
+        this.getEtfs();
+        this.updateAllocations();
+    }
+    
+    getCountries() {
         this.http.get('/api/countries').subscribe((response: Country[]) => {
             this.allCountries = response;
         });
-
+    }
+    
+    getEtfs() {
         this.http.get(`/api/etfs/${this.id}`).subscribe((etf: Etf) => {
             this.etf = etf;
         });
-        this.updateAllocations();
     }
 
     addAllocation() {
         this.allocations.push(new EtfCountryAllocation(this.etf, this.allCountries[0]));
     }
+
     saveAllocation() {
         this.allocations.forEach(el => {
             el.countryid = el.country.id;
@@ -43,13 +51,22 @@ export class EtfCountryAllocationComponent {
             this.updateAllocations();
         });
     }
+
     deleteAllocation(index){
         this.allocations.splice(index, 1);
     }
+
     updateAllocations() {
         this.http.get(`/api/etfcountryallocation/${this.id}`).subscribe((response: EtfCountryAllocation[]) => {
             this.allocations = response;
             this.allocations.forEach(el => el.country = this.allCountries.find(country => country.id === el.country.id));
+        });
+    }
+
+    uploadAllocations() {
+        this.http.post(`/api/upload/${this.id}`, {}).subscribe(response => {
+            this.getCountries();
+            this.updateAllocations();
         });
     }
 }

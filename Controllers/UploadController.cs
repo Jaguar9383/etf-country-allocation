@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MyEtf.Context;
+using MyEtf.Models.Data;
 using MyEtf.Models.Dto;
 
 namespace MyEtf.Controllers
@@ -13,12 +15,17 @@ namespace MyEtf.Controllers
     [Route("api/[controller]")]
     public class UploadController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Upload()
+        private readonly MyEtfContext _myEtfContext = new MyEtfContext();
+        
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Upload(Guid id)
         {
+            Etf etf = _myEtfContext.Etfs.FirstOrDefault(x => x.Id == id);
+            if(etf == null) return NotFound();
+
             var client = new HttpClient();
             var request = new HttpRequestMessage();
-            request.RequestUri = new Uri("https://www.ishares.com/uk/individual/en/products/251882/ishares-msci-world-ucits-etf-acc-fund/1506575576011.ajax?tab=all&fileType=json");
+            request.RequestUri = new Uri(etf.DataUrl);
             request.Method = HttpMethod.Get;
 
             request.Headers.Add("Accept", "*/*");
@@ -44,11 +51,37 @@ namespace MyEtf.Controllers
 
                 companies.Add(companyDto);
             }
-            return Ok(companies
+
+            var countries = companies
                         .GroupBy(c => c.Country)
-                        .Select(cl => new { Country = cl.First().Country, Percent = cl.Sum(c => c.Percent)})
-                        .OrderByDescending(x => x.Percent)
-            );
+                        .Select(cl => new { Name = cl.First().Country, Percent = cl.Sum(c => c.Percent)})
+                        .Where(x => x.Percent > 0)
+                        .OrderByDescending(x => x.Percent);
+
+            //empty
+            var allocationsToRemove = _myEtfContext.EtfCountryAllocations.Where(a => a.EtfId == id);
+            _myEtfContext.EtfCountryAllocations.RemoveRange(allocationsToRemove);
+
+            foreach(var country in countries)
+            {
+                var countryDb = _myEtfContext.Countries.FirstOrDefault(x => x.Name == country.Name);
+                if(countryDb == null) {
+                    _myEtfContext.Countries.Add(new Country{ Name = country.Name });
+                    _myEtfContext.SaveChanges();
+                    countryDb = _myEtfContext.Countries.FirstOrDefault(x => x.Name == country.Name);
+                }
+
+                //add
+                _myEtfContext.EtfCountryAllocations.Add(new EtfCountryAllocation{
+                    CountryId = countryDb.Id,
+                    EtfId = id,
+                    Allocation = country.Percent
+                });
+            }
+
+            _myEtfContext.SaveChanges();
+
+            return Ok(countries);
         }
     }
 }

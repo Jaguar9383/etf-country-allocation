@@ -28,7 +28,7 @@
         <tbody>
           <tr *ngFor="let line of result">
             <td>{{line.country.name}}</td>
-            <td>{{line.allocation}}</td>
+            <td>{{line.allocation | number : '1.1-2'}} %</td>
           </tr>
         </tbody>
       </table>
