@@ -10,9 +10,9 @@ import { EtfAllocation } from '../models/etf-allocation';
 })
 
 export class HomeComponent {
-  private etfAllocationList: EtfAllocation[] = [];
-  private allEtfs: Etf[];
-  result: Array<CountryAllocation> = new Array<CountryAllocation>();
+  etfAllocationList: EtfAllocation[] = [];
+  allEtfs: Etf[];
+  result: CountryAllocation[] = [];
 
   constructor(private http: HttpClient){}
 
@@ -23,7 +23,7 @@ export class HomeComponent {
   }
 
   addEtfAllocation(){
-    this.etfAllocationList.push(new EtfAllocation(this.allEtfs[0], 0));
+    this.etfAllocationList = [...this.etfAllocationList, new EtfAllocation(null, 0)];
   }
 
   deleteEtfAllocation(index){
