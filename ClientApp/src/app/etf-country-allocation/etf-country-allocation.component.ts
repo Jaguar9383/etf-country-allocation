@@ -14,7 +14,7 @@ export class EtfCountryAllocationComponent {
     private id: string;
     private etf: Etf = null;
     private allCountries: Country[];
-    private allocations: EtfCountryAllocation[] = [];
+    public allocations: EtfCountryAllocation[] = [];
 
     constructor(private http: HttpClient,
         private activatedRoute: ActivatedRoute) { }
