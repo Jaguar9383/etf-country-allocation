@@ -1,4 +1,3 @@
-import { isConstructorDeclaration } from "typescript";
 import { Etf } from "./etf";
 
 export class EtfAllocation {
